@@ -1,0 +1,35 @@
+body {
+  background-color: var(--color-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: #ffffff;
+
+  //   sane as figma
+  max-width: 610px;
+  box-shadow: 0px 5px 10px 5px rgba(222, 231, 255, 0.25);
+  border-radius: 20px;
+
+  @include respond(sm) {
+    padding: 0 70px;
+  }
+}
+
+.row {
+  display: flex;
+  margin: 0 -8px;
+}
+
+.col {
+  padding: 0 8px;
+  flex-grow: 1;
+  width: 100%;
+}

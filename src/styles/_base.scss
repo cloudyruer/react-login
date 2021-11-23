@@ -13,6 +13,7 @@
 
 body {
   box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
 }
 
 // RWD breakpoint
@@ -49,4 +50,13 @@ $bp-xl: 1200px;
       @content;
     }
   }
+}
+
+//common
+.v-visible {
+  visibility: visible;
+}
+
+.v-hidden {
+  visibility: hidden;
 }
