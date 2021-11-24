@@ -1,4 +1,8 @@
 const FormConfirm = ({ content, agree, setAgree }) => {
+  const onChangeHandler = (e) => {
+    setAgree(e.target.checked)
+  }
+
   return (
     <div className="form-confirm">
       <input
@@ -6,9 +10,7 @@ const FormConfirm = ({ content, agree, setAgree }) => {
         id="demo-check"
         className="form-confirm__box"
         checked={agree}
-        onChange={(e) => {
-          setAgree(e.target.checked)
-        }}
+        onChange={onChangeHandler}
       />
       <label htmlFor="demo-check" className="form-confirm__label">
         {content}

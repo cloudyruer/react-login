@@ -6,15 +6,24 @@ import Alt from './Alt'
 import FormConfirm from './FormConfirm'
 
 const SignUpForm = () => {
+  // 表單資訊
   const [info, setInfo] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
   })
+
+  // 使否顯示密碼
   const [showPassword, setShowPassword] = useState(true)
+
+  // 密碼長度至少為 8
   const [passMinLength, setPassMinLength] = useState(false)
+
+  // 判斷是否至少包含一位數字
   const [oneNumber, setOneNumber] = useState(false)
+
+  // 用戶是否同意規章
   const [agree, setAgree] = useState(false)
 
   const onFocusHandler = (e) => {
@@ -38,14 +47,24 @@ const SignUpForm = () => {
 
     // 如果是password時 額外判定
     if (type === 'password') {
+      // 密碼長度至少為 8
       setPassMinLength(value.length >= 8)
+      // 判斷是否至少包含一位數字
       setOneNumber(/\d/.test(value))
     }
+
     setInfo((prev) => ({ ...prev, [type]: value }))
   }
 
+  const onSubmitHandler = (e) => {
+    e.preventDefault()
+    // 根據條件判斷 passMinLength, oneNumber, agree etc.
+    // axios.....
+    console.log('POST')
+  }
+
   return (
-    <form className="form">
+    <form className="form" onSubmit={onSubmitHandler}>
       <h3 className="form__subtitle">Start from free</h3>
       <h2 className="form__title">Create an account</h2>
 
