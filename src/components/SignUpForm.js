@@ -1,8 +1,49 @@
+import { useState } from 'react'
+
+// 個人
 import SignUpBtn from './SignUpBtn'
 import Alt from './Alt'
 import FormConfirm from './FormConfirm'
 
 const SignUpForm = () => {
+  const [info, setInfo] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+  })
+  const [showPassword, setShowPassword] = useState(true)
+  const [passMinLength, setPassMinLength] = useState(false)
+  const [oneNumber, setOneNumber] = useState(false)
+  const [agree, setAgree] = useState(false)
+
+  const onFocusHandler = (e) => {
+    e.target.classList.add('form-wrap__field--active')
+    e.target.nextElementSibling.classList.remove('v-hidden')
+  }
+
+  const onBlurHandler = (e) => {
+    const type = e.target.dataset.type
+    // guard 有內容時 不回歸原本的效果
+    if (info[type].length) return
+    e.target.classList.remove('form-wrap__field--active')
+    e.target.nextElementSibling.classList.add('v-hidden')
+  }
+
+  const onChangeHandler = (e) => {
+    const type = e.target.dataset.type
+    const value = e.target.value
+    // guard 一鍵填入時 觸發效果
+    value && onFocusHandler(e)
+
+    // 如果是password時 額外判定
+    if (type === 'password') {
+      setPassMinLength(value.length >= 8)
+      setOneNumber(/\d/.test(value))
+    }
+    setInfo((prev) => ({ ...prev, [type]: value }))
+  }
+
   return (
     <form className="form">
       <h3 className="form__subtitle">Start from free</h3>
@@ -21,57 +62,99 @@ const SignUpForm = () => {
       <Alt content="Or use your email for registration" />
 
       <div className="row">
+        {/* first name */}
         <div className="col">
           <div className="form-wrap">
             <input
-              className="form-wrap__field form-wrap__field--active"
+              className="form-wrap__field "
               type="text"
               placeholder="First Name"
+              onFocus={onFocusHandler}
+              onBlur={onBlurHandler}
+              onChange={onChangeHandler}
+              value={info.firstName}
+              data-type="firstName"
             />
-            <span className="form-wrap__sub">First Name</span>
+            <span className="form-wrap__sub v-hidden">First Name</span>
           </div>
         </div>
 
+        {/* last name */}
         <div className="col">
           <div className="form-wrap">
             <input
-              className="form-wrap__field form-wrap__field--active"
+              className="form-wrap__field"
               type="text"
               placeholder="Last Name"
+              onFocus={onFocusHandler}
+              onBlur={onBlurHandler}
+              onChange={onChangeHandler}
+              data-type="lastName"
             />
-            <span className="form-wrap__sub">Last Name</span>
+            <span className="form-wrap__sub v-hidden">Last Name</span>
           </div>
         </div>
       </div>
 
-      <div className="form-wrap">
-        <input className="form-wrap__field" type="email" placeholder="E-mail" />
-        <span className="form-wrap__sub v-hidden">Email</span>
-      </div>
-
+      {/* email */}
       <div className="form-wrap">
         <input
           className="form-wrap__field"
-          type="password"
-          placeholder="Password"
+          type="email"
+          placeholder="E-mail"
+          onFocus={onFocusHandler}
+          onBlur={onBlurHandler}
+          onChange={onChangeHandler}
+          data-type="email"
         />
-        <span className="form-wrap__sub">Password</span>
-        <i className="far fa-eye form-wrap__icon form-wrap__icon--active"></i>
+        <span className="form-wrap__sub v-hidden">Email</span>
       </div>
 
+      {/* password */}
+      <div className="form-wrap">
+        <input
+          className="form-wrap__field"
+          type={showPassword ? 'password' : 'text'}
+          placeholder="Password"
+          onFocus={onFocusHandler}
+          onBlur={onBlurHandler}
+          onChange={onChangeHandler}
+          data-type="password"
+        />
+        <span className="form-wrap__sub v-hidden">Password</span>
+        <i
+          className={`far fa-eye form-wrap__icon ${
+            showPassword ? '' : 'form-wrap__icon--active'
+          }`}
+          onClick={() => setShowPassword((prev) => !prev)}
+        ></i>
+      </div>
+
+      {/* password verify */}
       <div className="form-verify">
-        <div className="form-verify__box form-verify__box--verify">
+        <div
+          className={`form-verify__box ${
+            passMinLength ? 'form-verify__box--verify' : ''
+          }`}
+        >
           <i className="fas fa-check-circle form-verify__icon"></i>&nbsp;
           <span>8 characters min.</span>
         </div>
-        <div className="form-verify__box">
+        <div
+          className={`form-verify__box ${
+            oneNumber ? 'form-verify__box--verify' : ''
+          }`}
+        >
           <i className="fas fa-check-circle"></i>&nbsp;<span>One number</span>
         </div>
       </div>
 
+      {/* confirm */}
       <FormConfirm
         content="By creating account, you agree to accept our Privacy Policy, Terms of
         Service and Notification settings."
+        agree={agree}
+        setAgree={setAgree}
       />
 
       <button type="submit" className="btn btn--submit">
